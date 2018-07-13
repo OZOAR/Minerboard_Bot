@@ -133,7 +133,7 @@ def choose_user(message):
         config.last_id = target_id.group(0)
         user = DataBase.db_select(target_id.group(0)).fetchone()
         bot.send_message(admin_chat, 'Напишите сообщение для: ' + target_id.group(0) + '\nnickname: ' +
-                         user[1] + '\nusername: @' + user[2] + '\nДля ответа используйте /a text.')
+                         user[1] + '\nusername: @' + user[2] + '\nДля ответа используйте /a "text".')
 
     else:
         bot.send_message(admin_chat, 'None')
