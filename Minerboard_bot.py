@@ -61,8 +61,10 @@ def any_message(message):
 @bot.message_handler(commands=['help'])
 def receive_help_info(message):
     keyboard = telebot.types.InlineKeyboardMarkup()
-    url_button = telebot.types.InlineKeyboardButton(text="Minerboard", url="https://minerboard.com")
-    keyboard.add(url_button)
+    mbrd_web_button = telebot.types.InlineKeyboardButton(text="Minerboard web-site", url="https://minerboard.com")
+    mbrd_bctk_button = telebot.types.InlineKeyboardButton(text="Minerboard bitcointalk",
+                                                          url="https://bitcointalk.org/index.php?topic=2379339.msg24291948#msg24291948")
+    keyboard.add(mbrd_web_button, mbrd_bctk_button)
     bot.send_message(message.chat.id, help_info, reply_markup=keyboard)
     DataBase.db_insert(
         [None, message.chat.first_name, message.chat.username, message.chat.id, message.from_user.language_code])
@@ -140,10 +142,12 @@ def choose_user(message):
 @bot.message_handler(func=lambda message: message.chat.id == admin_chat, commands=['users'])
 def get_user_list(message):
     user_list = DataBase.db_select(full=1).fetchall()
+    out_string = ''
     if user_list:
         for i in user_list:
-            bot.send_message(admin_chat, 'nick: {0},\nusername: {1},\nid: /say{2},\nlang: {3}.\n'.format(
-                i[1], i[2], i[3], i[4]))
+            out_string += 'nick: {0},\nusername: {1},\nid: /say{2},\nlang: {3}.\n'.format(
+                i[1], i[2], i[3], i[4])
+        bot.send_message(admin_chat, out_string)
     else:
         bot.send_message(admin_chat, 'No users detected or troubles occurred')
 
